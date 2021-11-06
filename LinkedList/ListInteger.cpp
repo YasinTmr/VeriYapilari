@@ -119,7 +119,7 @@ void deleteNode(Node** head, int num) {
     }
 } 
 
-//Listede eleman arıyor
+//Listede düğüm  arıyor - Iteratif
 bool search(Node* head, int key)
 {
     //Liste içinde dolaşmak için gerekli pointer
@@ -136,7 +136,7 @@ bool search(Node* head, int key)
     return false;
 }
 
-//Listede eleman arıyor
+//Listede düğüm  arıyor - Recursive
 bool searchRec(Node* head, int key)
 {
     // Base case
