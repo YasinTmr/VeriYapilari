@@ -21,20 +21,21 @@ int main()
     //Değerler ekleniyor
     push( 12 );
     push( 21 );
-    push( 7 );
-    push( 3 );
-    push( 4 );
-    append(27);
+    append( 7 );
+    append( 3 );
+    append( 4 );
+    append( 27 );
 
     printList();
 
-    deleteNode( 3 );
+    deleteNode( 27 );
     printList();
 
-    cout << "search( 7 ): " << search( 7 ) << endl;
-    cout << "searchRec( 21 ): " << searchRec(head, 21 ) << endl;
-    cout << "searchRec( 45 ): " << searchRec(head, 45 ) << endl;
-    cout << "searchRec( 3 ): " << searchRec(head, 3 ) << endl;
+
+     cout << "search( 7 ): " << search( 27 ) << endl;
+     cout << "searchRec( head, 21 ): " << searchRec(head, 21 ) << endl;
+     cout << "searchRec( head, 45 ): " << searchRec(head, 45 ) << endl;
+     cout << "searchRec( head, 3 ): " << searchRec(head, 3 ) << endl;
 
 
    return 0;
@@ -42,13 +43,33 @@ int main()
 
 //Liste başına dügüm ekler
 void push( int data ) { 
-    Node * newNode;
+    Node *newNode; //Yeni dügüm
+    Node *temp;//Liste içinde dolaşmak için
 
+    //Yeni dügüm yaratıldı
     newNode = new Node;
     newNode->value = data;
-    newNode->next = head;
 
-    head = newNode;
+    if ( head == nullptr ) {
+        //Liste boşsa
+        newNode->next = newNode;
+        head = newNode;
+    }
+    else {
+        //İşaretçi liste başını gösterir
+        temp = head;
+
+        while ( temp->next != head ) {
+            temp = temp->next;
+        }
+
+        //En son dügüm yeni ekleneni gösterdi
+        temp->next = newNode;
+
+        //Yeni dügüm head yapıldı
+        newNode->next = head;
+        head = newNode;
+    }
 }
 
 //Liste sonuna dügüm ekler
@@ -59,17 +80,18 @@ void append( int data ) {
     //Yeni dügüm yaratıldı
     newNode = new Node;
     newNode->value = data;
-    newNode->next = nullptr;
+    newNode->next = head;
 
     if ( head == nullptr ) {
         //Liste boşsa
+        newNode->next = newNode;
         head = newNode;
     }
     else {
         //İşaretçi liste başını gösterir
         temp = head;
 
-        while ( temp->next) {
+        while ( temp->next != head ) {
             temp = temp->next;
         }
 
@@ -84,11 +106,11 @@ void printList()
     //Liste içinde dolaşmak için gerekli pointer
     Node *temp = head;
 
-    cout << "LinkList icerigi:" << endl;
-    while ( temp ) {
+    cout << "CircularLinkList icerigi:" << endl;
+    do {
         cout << temp->value << endl;
         temp = temp->next;
-    } 
+    } while( temp != head );
     cout << endl;
 }
 
@@ -99,8 +121,8 @@ void deleteNode( int num) {
 
     if ( head == nullptr ) {
          head = temp->next;     // Head değişti
-        delete temp;            // Eski head hafızadan silindi
-        return;
+         delete temp;            // Eski head hafızadan silindi
+         return;
     }
 
     //Silinecek dügüm liste başındaysa
@@ -114,7 +136,7 @@ void deleteNode( int num) {
         //İşaretçi liste başını gösterir
         temp = head;
 
-        while( temp != nullptr && temp->value != num ) {
+        while( temp->next != head && temp->value != num ) {
             previousNode = temp;
             temp = temp->next;
         }
@@ -132,28 +154,28 @@ bool search( int key )
     //Liste içinde dolaşmak için gerekli pointer
     Node *temp = head;
 
-    while ( temp ) {
+     do {
         if ( temp->value == key ) {
             return true;
         }
 
         temp = temp->next;
-    } 
+    } while( temp->next != head );
     
     return false;
 }
 
 //Listede düğüm  arıyor - Recursive
-bool searchRec(Node *ptr,  int key )
+bool searchRec(Node *nodePtr,  int key )
 {
     // Base case
-    if (ptr == nullptr)
+    if (nodePtr->next == head)
         return false;
      
     // If key is present in current node, return true
-    if ( ptr->value == key )
+    if ( nodePtr->value == key )
         return true;
  
     // Recur for remaining list
-    return searchRec(ptr->next, key);
+    return searchRec(nodePtr->next, key);
 }

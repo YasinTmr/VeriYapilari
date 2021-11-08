@@ -1,0 +1,15 @@
+Pointer Gösterimi   Dizi gösterimindeki sonucu
+ptr                 arr, &arr[0]    Dizinin ilk elemanının adresi
+ptr++               &arr[x++]       Pointer'ı dizinin bir sonraki elemanının adresine ilerletir.
+ptr + 1             &arr[1]         Dizinin ikinci elemanın adresi.
+*ptr                arr[0]          Dizinin ilk elemanının değeri.
+*(ptr + 1)          arr[1]          Dizinin ikinci elemanının değeri.
+*(ptr) + 1          arr[0] + 1      Dizinin ilk elemanının değerini bir artırır.
+*ptr++              arr[x++]        Değer kullanıldıktan sonra dizinin bir sonraki elemanına geçiyor.
+*ptr--              arr[x--]        Değer kullanıldıktan sonra dizinin önceki elemanına geç.
+*++ ptr             arr[++x]        Dizinin bir sonraki elemanına geç ve daha sonra burdaki değeri kullan.
+*-- ptr             arr[--x]        Dizinin bir önceki elemanına geç ve daha sonra burdaki değeri kullan.
+(* ptr)++           arr[0]++        Dizinin ilk elemanının değerini 1 artır.
+(* ptr)--           arr[0]--        Dizinin ilk elemanının değerini 1 azaltır.
+(*( ptr + 2))++     arr[2]++        Dizinin üçüncü elemanının değeri 1 atırır.
+(*( ptr + 2))--     arr[2]--        Dizinin üçüncü elemanının değeri 1 azaltır.
