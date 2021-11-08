@@ -26,6 +26,8 @@ int main()
     appendAsc( 27 );
 
      printList();
+     cout << "searchRec(head, 32 ): " << searchRec(head, 32 ) << endl;
+     cout << "search( 12 ): " << search( 12 ) << endl;
 
     // deleteNode( 12 );
     // printList();
@@ -77,7 +79,7 @@ void append( int data ) {
     }
 }
 
-//Liste sonuna dügüm ekler
+//Liste sonuna veya başına artan sırada eleman ekler
 void appendAsc( int data ) { 
     Node *newNode; //Yeni dügüm
     Node *temp;//Liste içinde dolaşmak için
@@ -91,7 +93,7 @@ void appendAsc( int data ) {
         //Liste boşsa
         head = newNode;
     }
-    else if ( newNode->value <= head->value ) //Head solundaysa
+    else if ( data <= head->value ) //Head solundaysa
     {
         newNode->next = head;
         head = newNode;
@@ -99,7 +101,10 @@ void appendAsc( int data ) {
     else
     {
         temp = head;
-        while( temp->next != nullptr && temp->next->value < newNode->value ) {
+
+        //Liste sonuna gelinmediyse, 
+        //aktif dügümden sonraki dügümün değeri eklenen değerdem  küçükse sonraki dügüme geç
+        while( temp->next != nullptr && temp->next->value < data ) {
             temp = temp->next;
         }
 
@@ -124,7 +129,7 @@ void printList()
 
 //dügüm siler
 void deleteNode( int num) {
-    Node *previousNode; //Bir önceki dügüm
+    Node *prev; //Bir önceki dügüm
     Node* temp = head;//Listede dolaşmak için
 
     if ( head == nullptr ) {
@@ -143,12 +148,12 @@ void deleteNode( int num) {
         temp = head;
 
         while( temp != nullptr && temp->value != num ) {
-            previousNode = temp;
+            prev = temp;
             temp = temp->next;
         }
 
         if ( temp ) {
-            previousNode->next = temp->next;
+            prev->next = temp->next;
             delete temp;
         }
     }
@@ -160,7 +165,7 @@ bool search( int key )
     //Liste içinde dolaşmak için gerekli pointer
     Node *temp = head;
 
-    while ( temp ) {
+    while ( temp != nullptr ) {
         if ( temp->value == key ) {
             return true;
         }
@@ -174,14 +179,14 @@ bool search( int key )
 //Listede düğüm  arıyor - Recursive
 bool searchRec(Node *ptr,  int key )
 {
-    // Base case
+    //Recursive sonlandırma şartı
     if (ptr == nullptr)
         return false;
      
-    // If key is present in current node, return true
+    //Değer bulunduysa true döndür
     if ( ptr->value == key )
         return true;
  
-    // Recur for remaining list
+    //liste içinde recursive ilerle
     return searchRec(ptr->next, key);
 }
