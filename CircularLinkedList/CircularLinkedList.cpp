@@ -119,9 +119,8 @@ void deleteNode( int num) {
     Node *previousNode; //Bir önceki dügüm
     Node* temp = head;//Listede dolaşmak için
 
+    //Liste boşsa
     if ( head == nullptr ) {
-         head = temp->next;     // Head değişti
-         delete temp;            // Eski head hafızadan silindi
          return;
     }
 

@@ -12,29 +12,30 @@ struct Node* head = nullptr;
 void push( int data );//Liste başına dügüm ekler
 void printList();//Listeyi ekrana yazdırır
 void append( int data );//Liste sonuna dügüm ekliyor
+void appendAsc( int data );//Sona sıralı bir şekilde ekliyor
 void deleteNode( int num );//Listeden bir düğüm siliyor
-bool search( int key );
-bool searchRec(Node *ptr,  int key );
+bool search( int key );//Arama işlemi yapıyor
+bool searchRec(Node *ptr,  int key );//Recursive arama
 
 int main()
 {
     //Değerler ekleniyor
-    push( 12 );
-    push( 21 );
-    push( 7 );
-    push( 3 );
-    push( 4 );
-    append(27);
+    appendAsc( 12 );
+    appendAsc( 21 );
+    appendAsc( 4 );
+    appendAsc( 27 );
 
-    printList();
+     printList();
 
-    deleteNode( 3 );
-    printList();
+    // deleteNode( 12 );
+    // printList();
 
-    cout << "search( 7 ): " << search( 7 ) << endl;
-    cout << "searchRec( 21 ): " << searchRec(head, 21 ) << endl;
-    cout << "searchRec( 45 ): " << searchRec(head, 45 ) << endl;
-    cout << "searchRec( 3 ): " << searchRec(head, 3 ) << endl;
+    // cout << "searchRec( 21 ): " << searchRec(head, 21 ) << endl;
+
+    // cout << "search( 7 ): " << search( 7 ) << endl;
+    // cout << "searchRec( 21 ): " << searchRec(head, 21 ) << endl;
+    // cout << "searchRec( 45 ): " << searchRec(head, 45 ) << endl;
+    // cout << "searchRec( 3 ): " << searchRec(head, 3 ) << endl;
 
 
    return 0;
@@ -42,9 +43,7 @@ int main()
 
 //Liste başına dügüm ekler
 void push( int data ) { 
-    Node * newNode;
-
-    newNode = new Node;
+    Node * newNode = new Node;
     newNode->value = data;
     newNode->next = head;
 
@@ -69,11 +68,42 @@ void append( int data ) {
         //İşaretçi liste başını gösterir
         temp = head;
 
-        while ( temp->next) {
+        while ( temp->next ) {
             temp = temp->next;
         }
 
         //En son dügüm yeni ekleneni gösterdi
+        temp->next = newNode;
+    }
+}
+
+//Liste sonuna dügüm ekler
+void appendAsc( int data ) { 
+    Node *newNode; //Yeni dügüm
+    Node *temp;//Liste içinde dolaşmak için
+
+    //Yeni dügüm yaratıldı
+    newNode = new Node;
+    newNode->value = data;
+    newNode->next = nullptr;
+
+    if ( head == nullptr ) { //Head boşsa
+        //Liste boşsa
+        head = newNode;
+    }
+    else if ( newNode->value <= head->value ) //Head solundaysa
+    {
+        newNode->next = head;
+        head = newNode;
+    }
+    else
+    {
+        temp = head;
+        while( temp->next != nullptr && temp->next->value < newNode->value ) {
+            temp = temp->next;
+        }
+
+        newNode->next = temp->next;
         temp->next = newNode;
     }
 }
@@ -98,8 +128,6 @@ void deleteNode( int num) {
     Node* temp = head;//Listede dolaşmak için
 
     if ( head == nullptr ) {
-         head = temp->next;     // Head değişti
-        delete temp;            // Eski head hafızadan silindi
         return;
     }
 
