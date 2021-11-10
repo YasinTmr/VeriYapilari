@@ -20,27 +20,18 @@ bool searchRec(Node *ptr,  int key );//Recursive arama
 int main()
 {
     //Değerler ekleniyor
-    appendAsc( 12 );
-    appendAsc( 21 );
-    appendAsc( 4 );
-    appendAsc( 27 );
+    append( 12 );
+    // append( 21 );
+    // append( 4 );
+    // append( 27 );
+
+    printList();
+
+    deleteNode(12);
 
      printList();
-     cout << "searchRec(head, 32 ): " << searchRec(head, 32 ) << endl;
-     cout << "search( 12 ): " << search( 12 ) << endl;
 
-    // deleteNode( 12 );
-    // printList();
-
-    // cout << "searchRec( 21 ): " << searchRec(head, 21 ) << endl;
-
-    // cout << "search( 7 ): " << search( 7 ) << endl;
-    // cout << "searchRec( 21 ): " << searchRec(head, 21 ) << endl;
-    // cout << "searchRec( 45 ): " << searchRec(head, 45 ) << endl;
-    // cout << "searchRec( 3 ): " << searchRec(head, 3 ) << endl;
-
-
-   return 0;
+    return 0;
 }
 
 //Liste başına dügüm ekler

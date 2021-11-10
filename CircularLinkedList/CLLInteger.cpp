@@ -12,22 +12,23 @@ struct Node* head = nullptr;
 void push( int data );//Liste başına dügüm ekler
 void printList();//Listeyi ekrana yazdırır
 void append( int data );//Liste sonuna dügüm ekliyor
+void appendAsc( int data );//Listeye artan şekilde eleman ekliyor
 void deleteNode( int num );//Listeden bir düğüm siliyor
-bool search( int key );
-bool searchRec(Node *ptr,  int key );
+bool search( int key );//Liste içinde arama yapıyor
+bool searchRec(Node *ptr,  int key );//Liste içinde recursive arama yapıyor
 
 int main()
 {
     //Değerler ekleniyor
-    append( 7 );
-    append( 3 );
-    append( 4 );
-    append( 27 );
+    append( 12 );
+    // append( 21 );
+    // append( 4 );
 
     printList();
 
-    cout << "searchRec(head, 7 ): " << searchRec(head, 7 ) << endl;
+    deleteNode(12);
 
+     printList();
 
    return 0;
 }
@@ -91,6 +92,52 @@ void append( int data ) {
     }
 }
 
+//Liste sonuna veya başına artan sırada eleman ekler
+void appendAsc( int data ) { 
+    Node *newNode; //Yeni dügüm
+    Node *temp;//Liste içinde dolaşmak için
+
+    //Yeni dügüm yaratıldı
+    newNode = new Node;
+    newNode->value = data;
+    newNode->next = nullptr;
+
+    if ( head == nullptr ) { //Head boşsa
+        //Liste boşsa
+        newNode->next = newNode;
+        head = newNode;
+    }
+    else if ( data <= head->value ) //Head solundaysa
+    {
+        newNode->next = head;
+
+        //Son düğüme gidilir bunun next'i newNode yapılır
+         temp = head;
+         while(temp->next!=head){
+            temp = temp->next;
+         }
+         
+         //Son düğümün next'i yeni düğüm yapıldı
+         temp->next = newNode;
+
+         //head yeni düğüm oldu
+         head = newNode;
+    }
+    else
+    {
+        temp = head;
+
+        //Liste sonuna gelinmediyse, 
+        //aktif dügümden sonraki dügümün değeri eklenen değerdem  küçükse sonraki dügüme geç
+        while( temp->next != head && temp->next->value < data ) {
+            temp = temp->next;
+        }
+
+        newNode->next = temp->next;
+        temp->next = newNode;
+    }
+}
+
 //Listeyi ekrana yazdırır
 void printList()
 {
@@ -108,7 +155,7 @@ void printList()
 //Aranılan düğümü siler
 void deleteNode( int num) {
     Node *prev; //Bir önceki dügüm
-    Node* temp = head;//Listede dolaşmak için
+    Node* last;//Listede dolaşmak için
 
     if ( head == nullptr ) {
         //Liste boşsa işlem yapma
@@ -117,37 +164,50 @@ void deleteNode( int num) {
     else if ( head->value == num )
     {
         //Silinecek değer başlangıçta ise         
+        //Son düğüme gidilir
+        last = head;
 
-         //Son düğüme gidilir
-         while(temp->next!=head){
-            temp = temp->next;
+         while(last->next!=head){
+            last = last->next;
          }
 
-         //Son düğüm head kısmı düzeltilir
-         Node *nodeDeleted = head;//Geçici değişkene atandı listeyi bozmamak için
-         head = head->next;
-         temp->next = head;
-         delete nodeDeleted;
+        //Silinecek bir düğüm varsa 
+        if ( last->next == last ) {
+            //Liste boşaltılır
+            delete head;
+            head = nullptr;
+        }
+        else
+        {
+            //Son düğüm head kısmı düzeltilir
+            Node *nodeDeleted = head;//Geçici değişkene atandı listeyi bozmamak için
+            head = head->next;
+            last->next = head;
+            delete nodeDeleted;
+        }
     }
     else 
     {
+        //İşaretçi liste başını gösterdi
+        last = head;
+
         //Silinecek düğüm sonda ya da ortadadır
-        while(temp->next!=head){
+        while(last->next!=head){
             //Silinecek düğüm ortalarda 
-            if(temp->value == num ) {
-                prev->next = temp->next;
-                delete temp;
+            if(last->value == num ) {
+                prev->next = last->next;
+                delete last;
                 return;
             }
 
-            prev = temp;
-            temp = temp->next;
+            prev = last;
+            last = last->next;
         }
 
-        //Eğer son düğümde bulunduysa 
-        if ( temp->value == num ) {
+        //Silinecek düğüm son düğümse 
+        if ( last->value == num ) {
             prev->next = head;
-            delete temp;
+            delete last;
         }
     }
 } 
