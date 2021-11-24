@@ -12,6 +12,7 @@ struct Node* head = nullptr;
 
 void push( int data );//Liste başına dügüm ekler
 void printList();//Listeyi ekrana yazdırır
+void printListRec(Node *ptr);
 void append( int data );//Liste sonuna dügüm ekliyor
 void appendAsc( int data );//Sona sıralı bir şekilde ekliyor
 void deleteNode( int num );//Listeden bir düğüm siliyor
@@ -21,14 +22,15 @@ bool searchRec(Node *ptr,  int key );//Recursive arama
 int main()
 {
     //Değerler ekleniyor
-    append( 12 );
-    append( 21 );
-    append( 4 );
-    append( 1 );
-
-    printList();
+    push( 12 );
+    push( 21 );
+    push( 4 );
+    push( 1 );
 
     
+    printList();
+    deleteNode( 21 );
+    printList();
 
    return 0;
 }
@@ -38,6 +40,11 @@ void push( int data ) {
     Node * newNode = new Node;
     newNode->value = data;
     newNode->next = head;
+
+    if ( head != nullptr ) {
+        head->prev = newNode;
+    }
+
     newNode->prev = nullptr;
 
     head = newNode;
@@ -75,7 +82,7 @@ void append( int data ) {
 //Liste sonuna veya başına artan sırada eleman ekler
 void appendAsc( int data ) { 
     Node *newNode; //Yeni dügüm
-    Node *temp;//Liste içinde son düğüme ulaşmak için
+    Node *last;//Liste içinde son düğüme ulaşmak için
 
     //Yeni dügüm yaratıldı
     newNode = new Node;
@@ -90,21 +97,22 @@ void appendAsc( int data ) {
     else if ( data <= head->value ) //Head solundaysa
     {
         newNode->next = head;
+        head->prev = newNode;
         head = newNode;
     }
     else
     {
-        temp = head;
+        last = head;
 
         //Liste sonuna gelinmediyse, 
         //aktif dügümden sonraki dügümün değeri eklenen değerdem  küçükse sonraki dügüme geç
-        while( temp->next != nullptr && temp->next->value < data ) {
-            temp = temp->next;
+        while( last->next != nullptr && last->next->value < data ) {
+            last = last->next;
         }
 
-        newNode->next = temp->next;
-        temp->next = newNode;
-        newNode->prev = temp;
+        newNode->next = last->next;
+        last->next = newNode;
+        newNode->prev = last;
     }
 }
 
@@ -120,6 +128,17 @@ void printList()
         temp = temp->next;
     } 
     cout << endl;
+}
+
+void printListRec(Node *ptr)
+{
+    if ( ptr == nullptr ) {
+        return;
+    }
+    else {
+        cout << ptr->value << endl;
+        return printListRec(ptr->next);
+    }
 }
 
 //dügüm siler

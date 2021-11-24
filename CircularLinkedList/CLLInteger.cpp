@@ -10,9 +10,12 @@ struct Node
 struct Node* head = nullptr;
 
 void push( int data );//Liste başına dügüm ekler
+void push(Node **head,  int data );
 void printList();//Listeyi ekrana yazdırır
+int lastValue();
 void append( int data );//Liste sonuna dügüm ekliyor
 void appendAsc( int data );//Listeye artan şekilde eleman ekliyor
+void appendDesc( int data );
 void deleteNode( int num );//Listeden bir düğüm siliyor
 bool search( int key );//Liste içinde arama yapıyor
 bool searchRec(Node *ptr,  int key );//Liste içinde recursive arama yapıyor
@@ -20,15 +23,17 @@ bool searchRec(Node *ptr,  int key );//Liste içinde recursive arama yapıyor
 int main()
 {
     //Değerler ekleniyor
-    append( 12 );
-    // append( 21 );
-    // append( 4 );
+    push(&head, 12 );
+    push(&head, 5 );
+    push(&head, 7 );
+    push(&head, 45 );
 
     printList();
+    cout << lastValue() << endl;
 
-    deleteNode(12);
+    searchRec( head, 7 );
 
-     printList();
+    printList();
 
    return 0;
 }
@@ -63,6 +68,37 @@ void push( int data ) {
         head = newNode;
     }
 }
+
+void push(Node **head,  int data ) { 
+    Node *newNode; //Yeni dügüm
+    Node *temp;//Liste içinde dolaşmak için
+
+    //Yeni dügüm yaratıldı
+    newNode = new Node;
+    newNode->value = data;
+
+    if ( *head == nullptr ) {
+        //Liste boşsa
+        newNode->next = newNode;
+        *head = newNode;
+    }
+    else {
+        //İşaretçi liste başını gösterir
+        temp = *head;
+
+        while ( temp->next != *head ) {
+            temp = temp->next;
+        }
+
+        //En son dügüm yeni ekleneni gösterdi
+        temp->next = newNode;
+
+        //Yeni dügüm head yapıldı
+        newNode->next = *head;
+        *head = newNode;
+    }
+}
+
 
 //Liste sonuna dügüm ekler
 void append( int data ) { 
@@ -120,6 +156,8 @@ void appendAsc( int data ) {
          //Son düğümün next'i yeni düğüm yapıldı
          temp->next = newNode;
 
+         newNode->next = head;
+
          //head yeni düğüm oldu
          head = newNode;
     }
@@ -130,6 +168,54 @@ void appendAsc( int data ) {
         //Liste sonuna gelinmediyse, 
         //aktif dügümden sonraki dügümün değeri eklenen değerdem  küçükse sonraki dügüme geç
         while( temp->next != head && temp->next->value < data ) {
+            temp = temp->next;
+        }
+
+        newNode->next = temp->next;
+        temp->next = newNode;
+    }
+}
+
+//Liste sonuna veya başına azalan sırada eleman ekler
+void appendDesc( int data ) { 
+    Node *newNode; //Yeni dügüm
+    Node *temp;//Liste içinde dolaşmak için
+
+    //Yeni dügüm yaratıldı
+    newNode = new Node;
+    newNode->value = data;
+    newNode->next = nullptr;
+
+    if ( head == nullptr ) { //Head boşsa
+        //Liste boşsa
+        newNode->next = newNode;
+        head = newNode;
+    }
+    else if ( data >= head->value ) //Head solundaysa
+    {
+        newNode->next = head;
+
+        //Son düğüme gidilir bunun next'i newNode yapılır
+         temp = head;
+         while(temp->next!=head){
+            temp = temp->next;
+         }
+         
+         //Son düğümün next'i yeni düğüm yapıldı
+         temp->next = newNode;
+
+         newNode->next = head;
+
+         //head yeni düğüm oldu
+         head = newNode;
+    }
+    else
+    {
+        temp = head;
+
+        //Liste sonuna gelinmediyse, 
+        //aktif dügümden sonraki dügümün değeri eklenen değerdem  küçükse sonraki dügüme geç
+        while( temp->next != head && temp->next->value > data ) {
             temp = temp->next;
         }
 
@@ -150,6 +236,18 @@ void printList()
         temp = temp->next;
     } while( temp != head );
     cout << endl;
+}
+
+int lastValue()
+{
+    //Liste içinde dolaşmak için gerekli pointer
+    Node *temp = head;
+
+    do {
+        temp = temp->next;
+    } while( temp->next != head );
+
+    return temp->value;
 }
 
 //Aranılan düğümü siler
@@ -226,7 +324,8 @@ bool search( int key )
         
         temp = temp->next;
     } while( temp != head );
-    
+
+
     return false;
 }
 

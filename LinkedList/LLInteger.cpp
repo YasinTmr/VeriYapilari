@@ -10,6 +10,7 @@ struct Node
 struct Node* head = nullptr;
 
 void push( int data );//Liste başına dügüm ekler
+void push(Node **head,  int data );
 void printList();//Listeyi ekrana yazdırır
 void append( int data );//Liste sonuna dügüm ekliyor
 void appendAsc( int data );//Sona sıralı bir şekilde ekliyor
@@ -20,14 +21,16 @@ bool searchRec(Node *ptr,  int key );//Recursive arama
 int main()
 {
     //Değerler ekleniyor
-    append( 12 );
+    //append( 12 );
     // append( 21 );
     // append( 4 );
     // append( 27 );
 
-    printList();
+    push(&head, 12);
+    push(&head, 21);
+    push(&head, 4);
+    push(&head, 27);
 
-    deleteNode(12);
 
      printList();
 
@@ -41,6 +44,15 @@ void push( int data ) {
     newNode->next = head;
 
     head = newNode;
+}
+
+//Liste başına dügüm ekler
+void push(Node **head,  int data ) { 
+    Node * newNode = new Node;
+    newNode->value = data;
+    newNode->next = *head;
+
+    *head = newNode;
 }
 
 //Liste sonuna dügüm ekler

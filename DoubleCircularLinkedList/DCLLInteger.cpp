@@ -11,6 +11,7 @@ struct Node
 struct Node* head = nullptr;
 
 void push( int data );//Liste başına dügüm ekler
+void push(Node **head, int data ) ;
 void printList();//Listeyi ekrana yazdırır
 void append( int data );//Liste sonuna dügüm ekliyor
 void appendAsc( int data );//Listeye artan şekilde eleman ekliyor
@@ -21,10 +22,10 @@ bool searchRec(Node *ptr,  int key );//Liste içinde recursive arama yapıyor
 int main()
 {
     //Değerler ekleniyor
-    append( 12 );
-    append( 21 );
-    append( 4 );
-    append( 25 );
+    push(&head, 12 );
+    push(&head, 21 );
+    push(&head, 4 );
+    push(&head, 25 );
 
     printList();
 
@@ -61,6 +62,37 @@ void push( int data ) {
  
     //head düğümü newNode yapıldı
     head = newNode;
+}
+
+//Liste başına dügüm ekler
+void push(Node **head, int data ) { 
+    Node *newNode; //Yeni dügüm
+
+    //Liste boşsa 
+    if ( *head == nullptr ) {
+        newNode = new Node;
+        newNode->value = data;
+        newNode->next = newNode->prev = newNode;
+        *head = newNode;
+        return;
+    }
+
+    //Son düğüm bulunur
+    Node *last = (*head)->prev;
+    
+    //Yeni düğüm dinamik olarak oluşturuldu
+    newNode = new Node;
+    newNode->value = data;  
+ 
+    //Yeni düğümüm önceki ve sonraki düğüm değerleri
+    newNode->next = *head;
+    newNode->prev = last;
+ 
+    //Son düğüm ve başlangıç düğümünün next ve prev değerleri güncellendi
+    last->next = (*head)->prev = newNode;
+ 
+    //head düğümü newNode yapıldı
+    *head = newNode;
 }
 
 //Liste sonuna dügüm ekler
@@ -252,6 +284,7 @@ bool search( int key )
 //Listede düğüm  arıyor - Recursive
 bool searchRec(Node *nodePtr,  int key )
 {     
+    
     //Son düğüm ve ilk düğümden dolayı öne alındı
     if ( nodePtr->value == key )
         return true;
